@@ -1,0 +1,13 @@
+.div{
+    display: flex;
+    justify-content: center;
+}
+
+.footer {
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 0.75rem;
+    color: var(--text-3);
+    font-family: var(--font-mono);
+    border-top: 1px solid var(--border);
+}

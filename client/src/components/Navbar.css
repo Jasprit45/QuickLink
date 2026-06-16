@@ -1,0 +1,40 @@
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 2rem;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 10;
+}
+
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--text-1);
+}
+
+.logoMark {
+    color: var(--accent);
+    font-size: 1.4rem; 
+}
+
+.nav { 
+    display: flex; 
+    align-items: center; 
+    gap: 1rem; 
+}
+
+.navHint {
+  font-size: 0.8rem;
+  color: var(--text-3);
+  font-family: var(--font-mono);
+}

@@ -6,6 +6,8 @@ const shortenUrl = async(req,res) => {
    try {
     const  {originalUrl} = req.body;
 
+    console.log("Calling :-", originalUrl);
+
     const shortCode  = generateCode();
 
     const newUrl = await createUrl(originalUrl, shortCode);
