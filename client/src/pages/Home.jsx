@@ -125,7 +125,7 @@ export default function Home() {
 
         </section>)}
     </section>
-    <section className="history">
+    {history.length>0 &&(<section className="history">
       <div className="historyHeader">
         <h2>Recent Links</h2>
 
@@ -173,7 +173,7 @@ export default function Home() {
             </tbody>
         </table>
         </div>
-    </section>
+    </section>)}
     <section className="features">
 
         <div className="featureCard">
