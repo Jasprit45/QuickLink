@@ -58,7 +58,7 @@ export default function Home() {
         try {
             setLoading(true);
             const codes = history.map(
-                (link) => link.short_url
+                (link) => link.shortCode
             );
 
             if (codes.length === 0) return;
@@ -68,12 +68,12 @@ export default function Home() {
             const clickMap = {};
 
             response.data.forEach((item) => {
-                clickMap[item.short_url] = item.clicks;
+                clickMap[item.short_code] = item.clicks;
             });
 
             const updatedHistory = history.map((link) => ({
                 ...link,
-                clicks: clickMap[link.short_url] || 0,
+                clicks: clickMap[link.shortCode] || 0,
             }));
 
             setHistory(updatedHistory);
