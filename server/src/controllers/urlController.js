@@ -50,6 +50,7 @@ const redirectUrl = async (req, res) => {
    }
 }
 
+
 module.exports = {
     shortenUrl,
     redirectUrl

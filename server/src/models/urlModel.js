@@ -24,8 +24,35 @@ const findByCode = async (shortCode) => {
   return result.rows[0] || null;
 };
 
+const getClicksByCode = async (shortCode) => {
+  const result = await pool.query(
+    `SELECT
+        clicks
+     FROM urls
+     WHERE short_code = $1`,
+    [shortCode]
+  );
+
+  return result.rows[0] || null;
+};
+
+const getClicksByCodes = async (codes) => {
+  const result = await pool.query(
+    `SELECT
+        short_code,
+        clicks
+     FROM urls
+     WHERE short_code = ANY($1)`,
+    [codes]
+  );
+
+  return result.rows;
+};
+
 
 module.exports= {
     createUrl,
-    findByCode
+    findByCode,
+    getClicksByCode,
+    getClicksByCodes
 }
