@@ -1,8 +1,8 @@
 import './Home.css'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import { useState } from 'react'
-import { shortenUrl } from '../services/api';
+import { useEffect, useState } from 'react'
+import { getBulkClicks, shortenUrl } from '../services/api';
 import toast from 'react-hot-toast';
 
 export default function Home() {
@@ -18,6 +18,17 @@ export default function Home() {
                 setShortUrl(data.short_url);
                 setUrl("");
             }
+            const existing = JSON.parse(localStorage.getItem("links")) || [];
+
+            const newHistory = [data, ...existing].slice(0, 10);
+
+            localStorage.setItem(
+            "links",
+            JSON.stringify(newHistory)
+            );
+
+            setHistory(newHistory);
+
         } catch (error) {
             console.error("Error in handleSorten : ", error);
         }
@@ -32,6 +43,53 @@ export default function Home() {
             console.error("Failed to Copy : ", error);
         }
     }
+
+     const [history, setHistory] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const storedLinks =
+        JSON.parse(localStorage.getItem("links")) || [];
+
+        setHistory(storedLinks);
+    }, []);
+
+    const refreshAnalytics = async () => {
+        try {
+            setLoading(true);
+            const codes = history.map(
+                (link) => link.short_url
+            );
+
+            if (codes.length === 0) return;
+
+            const response = await getBulkClicks(codes);
+
+            const clickMap = {};
+
+            response.data.forEach((item) => {
+                clickMap[item.short_url] = item.clicks;
+            });
+
+            const updatedHistory = history.map((link) => ({
+                ...link,
+                clicks: clickMap[link.short_url] || 0,
+            }));
+
+            setHistory(updatedHistory);
+
+            localStorage.setItem(
+                "links",
+                JSON.stringify(updatedHistory)
+            );
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
 
     
   return (
@@ -66,6 +124,55 @@ export default function Home() {
             </div>
 
         </section>)}
+    </section>
+    <section className="history">
+      <div className="historyHeader">
+        <h2>Recent Links</h2>
+
+        <button
+          onClick={refreshAnalytics}
+          disabled={loading}
+          className='refreshBtn'
+        >
+          {loading ? "Refreshing..." : "Refresh"}
+        </button>
+      </div>
+        <div className="tableContainer">
+        <table className="historyTable">
+            <thead>
+            <tr>
+                <th>Original URL</th>
+                <th>Short URL</th>
+                <th>Clicks</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {history.map((link) => (
+                <tr key={link.short_url}>
+                <td className="originalLink">
+                    {link.originalUrl}
+                </td>
+
+                <td>
+                    <a
+                    href={link.short_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="shortLink"
+                    >
+                    {link.short_url}
+                    </a>
+                </td>
+
+                <td className="clicks">
+                    {link.clicks || 0}
+                </td>
+                </tr>
+            ))}
+            </tbody>
+        </table>
+        </div>
     </section>
     <section className="features">
 

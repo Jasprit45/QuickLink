@@ -101,7 +101,7 @@
     border: none;
     border-radius: 8px;
 
-    background: #2563eb;
+    background:  #4f46e5;
     color: white;
 
     font-size: 0.95rem;
@@ -112,7 +112,107 @@
 }
 
 .resultContainer button:hover {
-    background: #1d4ed8;
+    background: #4338ca;
+}
+
+
+/* History */
+.history {
+  margin: 3rem;
+  width: 90%;
+}
+
+.historyHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.historyHeader h2 {
+  color: #ffffff;
+  font-size: 1.5rem;
+}
+
+.refreshBtn {
+  border: none;
+  background: #4f46e5;
+  color: white;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.refreshBtn:hover {
+  background: #4338ca;
+}
+
+.refreshBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.tableContainer {
+  overflow-x: auto;
+}
+
+.historyTable {
+  width: 100%;
+  border-collapse: collapse;
+  background: #161b22;
+  border-radius: 12px;
+  
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.historyTable thead {
+  background: #21262d;
+}
+
+.historyTable th {
+  padding: 1rem;
+  text-align: left;
+  color: #f8fafc;
+  font-weight: 600;
+}
+
+.historyTable td {
+  padding: 1rem;
+  color: #c9d1d9;
+  border-top: 1px solid #30363d;
+}
+
+.historyTable tr:hover {
+  background: #1f2937;
+}
+
+.originalLink {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.shortLink {
+  color: #60a5fa;
+  text-decoration: none;
+}
+
+.shortLink:hover {
+  text-decoration: underline;
+}
+
+.clicks {
+  text-align:start;
+  font-weight: 700;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 2rem;
+  color: #94a3b8;
 }
 
 
