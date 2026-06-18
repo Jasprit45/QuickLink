@@ -37,9 +37,7 @@ const redirectUrl = async (req, res) => {
 
     const url = await findByCode(code);
 
-    if (!url) {
-      return res.status(404).json({ success: false, error: 'Short URL not found' });
-    }
+    if (!url) return res.status(404).json({ success: false, error: 'Short URL not found' });
 
     return res.redirect(301, url.original_url);
 
