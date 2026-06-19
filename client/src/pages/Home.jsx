@@ -9,14 +9,19 @@ export default function Home() {
 
     const [url, setUrl] = useState("");
     const [shortUrl, setShortUrl] = useState("");
+    const [customAlias, setCustomAlias] = useState("");
     
 
     const handleSorten = async () => {
         try {
-            const data = await shortenUrl(url);
+            const data = await shortenUrl(url, customAlias );
             if(data) {
                 setShortUrl(data.short_url);
+                if(shortUrl != customAlias) {
+                    return toast.error(`${customAlias} not available`)
+                }
                 setUrl("");
+                setCustomAlias("");
             }
             const existing = JSON.parse(localStorage.getItem("links")) || [];
 
@@ -89,9 +94,6 @@ export default function Home() {
         }
     };
 
-
-
-    
   return (
     <>
     <Navbar/>
@@ -107,6 +109,12 @@ export default function Home() {
                 placeholder="Paste your URL here..."
                 value={url}
                 onChange={(e)=> setUrl(e.target.value)}
+            />
+            <input
+                type="text"
+                placeholder="Custom alias (optional)"
+                value={customAlias}
+                onChange={(e) => setCustomAlias(e.target.value)}
             />
 
             <button onClick={handleSorten} >

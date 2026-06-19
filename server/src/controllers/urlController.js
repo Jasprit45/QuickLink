@@ -1,18 +1,25 @@
 const {createUrl , findByCode} = require('../models/urlModel');
-const generateCode = require('../utils/generateCode');
+const {generateCode, generateSuffix} = require('../utils/generateCode');
 require('dotenv').config();
 
 const shortenUrl = async(req,res) => {
    try {
-    const  {originalUrl} = req.body;
+    const  {originalUrl, customAlias} = req.body;
 
-    console.log("Calling :-", originalUrl);
-
-    const shortCode  = generateCode();
+    let  shortCode  = generateCode();
+    if(customAlias) {
+        const existing = await findByCode(customAlias);
+        
+        if(existing) {
+            const suffix = generateSuffix();
+            shortCode = `${customAlias}-${suffix}`;
+        } else shortCode = customAlias;
+    }
+        
+       
 
     const newUrl = await createUrl(originalUrl, shortCode);
 
-    console.log(newUrl);
 
     const short_url = `${process.env.BASE_URL}/${newUrl.short_code}`;
 
