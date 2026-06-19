@@ -18,7 +18,7 @@ export default function Home() {
             if(data) {
                 setShortUrl(data.short_url);
                 if(shortUrl != customAlias) {
-                    return toast.error(`${customAlias} not available`)
+                     toast.error(`${customAlias} not available`)
                 }
                 setUrl("");
                 setCustomAlias("");
