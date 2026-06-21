@@ -57,11 +57,22 @@ const getClicksByCodes = async (codes) => {
   return result.rows;
 };
 
+const deleteByCodes = async (codes) => {
+  const result = await pool.query(
+    `DELETE FROM urls
+     WHERE short_code = ANY($1)
+     RETURNING short_code`,
+    [codes]
+  );
+
+  return result.rows;
+};
 
 module.exports= {
     createUrl,
     findByCode,
     getClicksByCode,
     getClicksByCodes,
-    getByCode
+    getByCode,
+    deleteByCodes
 }

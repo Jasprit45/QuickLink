@@ -1,4 +1,4 @@
-const {getClicksByCode , getClicksByCodes} = require('../models/urlModel');
+const {getClicksByCode , getClicksByCodes, deleteByCodes} = require('../models/urlModel');
 
 const getClickCounts  = async (req, res) => {
     try {
@@ -47,7 +47,34 @@ const getBulkClickCounts  = async (req, res) => {
     }
 }
 
+const deleteUrls = async (req, res) => {
+    try {
+        const { codes } = req.body;
+
+        if (!Array.isArray(codes) || !codes.length) {
+        return res.status(400).json({
+            success: false,
+            message: "Codes array required",
+        });
+        }
+
+        const deleted = await deleteByCodes(codes);
+
+        return res.status(200).json({
+        success: true,
+        deleted,
+        });
+    } catch (error) {
+        console.error('deleteUrls error:', error.message);
+        return res.status(500).json({
+            success: false,
+            error: 'Server error. Please try again.'
+        });
+    }
+}
+
 module.exports = {
     getClickCounts,
-    getBulkClickCounts
+    getBulkClickCounts,
+    deleteUrls
 }

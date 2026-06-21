@@ -183,7 +183,7 @@ export default function Home() {
                 </button>
 
                 <button onClick={handleShare}>
-                    Share
+                    Share QR
                 </button>
             </div>
         </div>
