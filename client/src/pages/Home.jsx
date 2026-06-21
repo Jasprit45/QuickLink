@@ -4,12 +4,17 @@ import Footer from '../components/Footer'
 import { useEffect, useState } from 'react'
 import { getBulkClicks, shortenUrl } from '../services/api';
 import toast from 'react-hot-toast';
+import { generateQRCode } from '../utils/generateQr';
 
 export default function Home() {
 
     const [url, setUrl] = useState("");
     const [shortUrl, setShortUrl] = useState("");
     const [customAlias, setCustomAlias] = useState("");
+    const [history, setHistory] = useState([]);
+   const [loading, setLoading] = useState(false);
+    const [qrCode, setQrCode] = useState("");
+    const [showQR, setShowQR] = useState(false);
     
 
     const handleSorten = async () => {
@@ -17,8 +22,8 @@ export default function Home() {
             const data = await shortenUrl(url, customAlias );
             if(data) {
                 setShortUrl(data.short_url);
-                if(shortUrl != customAlias) {
-                     toast.error(`${customAlias} not available`)
+                if(data.shortCode != customAlias) {
+                     toast.error(`${customAlias} not available. Provided ${data.shortCode}`);
                 }
                 setUrl("");
                 setCustomAlias("");
@@ -49,8 +54,41 @@ export default function Home() {
         }
     }
 
-     const [history, setHistory] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const handleShowQR = async () => {
+    try {
+        const qr = await generateQRCode(shortUrl);
+        setQrCode(qr);
+        setShowQR(true);
+    } catch (error) {
+        console.error(error);
+    }
+    };
+    const downloadQR = () => {
+        const link = document.createElement("a");
+
+        link.href = qrCode;
+        link.download = "quicklink-qr.png";
+
+        link.click();
+    };
+
+    const handleShare = async () => {
+        try {
+            if (navigator.share) {
+            await navigator.share({
+                title: "QuickLink",
+                text: "Check out this shortened URL",
+                url: shortUrl,
+            });
+            } else {
+            await navigator.clipboard.writeText(shortUrl);
+            toast.success("Link copied to clipboard");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
 
     useEffect(() => {
         const storedLinks =
@@ -129,9 +167,28 @@ export default function Home() {
                     {shortUrl}
                 </div>
                 <button onClick={handleCopy}>Copy</button>
+                <button onClick={handleShowQR}>Show QR</button>
             </div>
 
         </section>)}
+        {showQR && (
+        <div className="qrContainer">
+            <div className='qrBox'>
+                <h3>QR Code</h3>
+                <img src={qrCode} alt="QR Code" className="qrImage"/>
+            </div>
+            <div className="qrActions">
+                <button onClick={downloadQR}>
+                    Download QR
+                </button>
+
+                <button onClick={handleShare}>
+                    Share
+                </button>
+            </div>
+        </div>
+        
+        )}
     </section>
     {history.length>0 &&(<section className="history">
       <div className="historyHeader">
