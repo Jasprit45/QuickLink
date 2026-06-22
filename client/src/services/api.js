@@ -19,3 +19,9 @@ export const getBulkClicks = async (codes) => {
   const {data} = await api.post('/api/analytics', {codes});
   return data;
 }
+
+export const deleteUrls = async (codes) => {
+  const {data} = await api.delete('/api/url', {
+    data: {codes}});
+  return  data;
+}

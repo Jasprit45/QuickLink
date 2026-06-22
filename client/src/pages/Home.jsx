@@ -2,7 +2,7 @@ import './Home.css'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { useEffect, useState } from 'react'
-import { getBulkClicks, shortenUrl } from '../services/api';
+import { deleteUrls, getBulkClicks, shortenUrl } from '../services/api';
 import toast from 'react-hot-toast';
 import { generateQRCode } from '../utils/generateQr';
 
@@ -12,9 +12,10 @@ export default function Home() {
     const [shortUrl, setShortUrl] = useState("");
     const [customAlias, setCustomAlias] = useState("");
     const [history, setHistory] = useState([]);
-   const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [qrCode, setQrCode] = useState("");
     const [showQR, setShowQR] = useState(false);
+    const [selected, setSelected] = useState([]);
     
 
     const handleSorten = async () => {
@@ -132,6 +133,31 @@ export default function Home() {
         }
     };
 
+    const handleDelete = async () => {
+        try {
+            
+            const data = await deleteUrls(selected);
+
+            const updatedHistory = history.filter(
+            link =>
+                !selected.includes(
+                link.shortCode
+                )
+            );
+
+            setHistory(updatedHistory);
+
+            localStorage.setItem(
+            "links",
+            JSON.stringify(updatedHistory)
+            );
+
+            setSelected([]);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
   return (
     <>
     <Navbar/>
@@ -209,6 +235,7 @@ export default function Home() {
                 <th>Original URL</th>
                 <th>Short URL</th>
                 <th>Clicks</th>
+                <th><button  onClick={handleDelete} disabled={!selected.length}>Delete</button></th>
             </tr>
             </thead>
 
@@ -232,6 +259,18 @@ export default function Home() {
 
                 <td className="clicks">
                     {link.clicks || 0}
+                </td>
+                <td className='checkbox'>
+                    <input type="checkbox" checked={selected.includes(link.shortCode)} onChange={(e) => {
+                        if (e.target.checked) {
+                            setSelected(prev => [ ...prev, link.shortCode ]);
+                        } else {
+                            setSelected(prev => prev.filter(
+                                code => code !== link.shortCode
+                            ));
+                        }
+                        }}
+                    />
                 </td>
                 </tr>
             ))}
