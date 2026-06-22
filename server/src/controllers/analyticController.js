@@ -49,7 +49,7 @@ const getBulkClickCounts  = async (req, res) => {
 
 const deleteUrls = async (req, res) => {
     try {
-        const { codes } = req.body;
+        const { codes } = req.body || [];
 
         if (!Array.isArray(codes) || !codes.length) {
         return res.status(400).json({
