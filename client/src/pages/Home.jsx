@@ -23,7 +23,7 @@ export default function Home() {
             const data = await shortenUrl(url, customAlias );
             if(data) {
                 setShortUrl(data.short_url);
-                if(data.shortCode != customAlias) {
+                if(customAlias &&  data.shortCode != customAlias) {
                      toast.error(`${customAlias} not available. Provided ${data.shortCode}`);
                 }
                 setUrl("");
@@ -41,6 +41,10 @@ export default function Home() {
             setHistory(newHistory);
 
         } catch (error) {
+            if (error.response?.status === 429) {
+                alert(error.response.data.message);
+                return;
+            }
             console.error("Error in handleSorten : ", error);
         }
     }

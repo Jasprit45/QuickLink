@@ -2,9 +2,11 @@ const express = require('express');
 const router = express.Router();
 const { shortenUrl } = require('../controllers/urlController');
 const { validateUrl } = require('../middlewares/validateUrl');
+const { shortenLimit } = require('../middlewares/rateLimiter');
 const {  getClickCounts, getBulkClickCounts, deleteUrls } = require('../controllers/analyticController');
 
 router.post('/shorten',
+    shortenLimit,
     validateUrl,
     shortenUrl
 );
