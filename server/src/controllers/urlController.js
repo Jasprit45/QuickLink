@@ -1,4 +1,5 @@
-const {createUrl , findByCode,getByCode} = require('../models/urlModel');
+const {createUrl ,getByCode} = require('../models/urlModel');
+const { findUrlByCode } = require('../services/urlService');
 const {generateCode, generateSuffix} = require('../utils/generateCode');
 require('dotenv').config();
 
@@ -42,11 +43,11 @@ const redirectUrl = async (req, res) => {
     try {
     const  { code } = req.params;
 
-    const url = await findByCode(code);
+    const url = await findUrlByCode(code);
 
     if (!url) return res.status(404).json({ success: false, error: 'Short URL not found' });
 
-    return res.redirect(301, url.original_url);
+    return res.redirect(301, url);
 
     } catch (error) {
     console.error('redirectUrl error:', error.message);

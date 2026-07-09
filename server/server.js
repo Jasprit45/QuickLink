@@ -4,6 +4,7 @@ const pool = require('./src/config/db');
 require('dotenv').config();
 const urlRouter =  require('./src/routes/urlRoutes');
 const { redirectUrl } = require('./src/controllers/urlController');
+const redis  = require('./src/config/redis')
 
 const app = express();
 
@@ -15,6 +16,7 @@ const PORT = process.env.PORT;
 app.use('/api', urlRouter);
 
 app.get('/:code', redirectUrl);
+
 
 app.listen(PORT , ()=> {
     console.log(`server is running on ${PORT}`);

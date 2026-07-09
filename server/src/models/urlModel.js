@@ -13,13 +13,21 @@ const createUrl = async (originalUrl, shortCode) => {
      return result.rows[0];
 }
 
-const findByCode = async (shortCode) => {
+const IncrementClicks = async (shortCode) => {
   const result = await pool.query(
     `UPDATE urls
      SET clicks = clicks + 1
      WHERE short_code = $1
-     RETURNING *`,
-    [shortCode]
+     RETURNING clicks`,
+     [shortCode]
+  );
+  return result.rows[0] || null;
+};
+const findByCode = async (shortCode) => {
+  const result = await pool.query(
+    `SELECT * FROM urls
+     WHERE short_code = $1`,
+     [shortCode]
   );
   return result.rows[0] || null;
 };
@@ -70,9 +78,10 @@ const deleteByCodes = async (codes) => {
 
 module.exports= {
     createUrl,
-    findByCode,
+    IncrementClicks,
     getClicksByCode,
     getClicksByCodes,
     getByCode,
+    findByCode,
     deleteByCodes
 }
