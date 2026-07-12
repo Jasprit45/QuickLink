@@ -22,6 +22,8 @@ const findUrlByCode = async (code) => {
             }
         );
 
+        await redis.incr(`click:${code}`);
+
         await IncrementClicks(code);
         return url.original_url;
 
