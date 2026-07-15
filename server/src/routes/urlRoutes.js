@@ -19,12 +19,8 @@ router.post('/analytics', getBulkClickCounts);
 
 router.delete('/url', deleteUrls);
 
-router.get("/internal/sync-clicks",
+router.get('/internal/sync-clicks',
     validateSync,
     syncClicks);
-
-
-
-
 
 module.exports = router;
