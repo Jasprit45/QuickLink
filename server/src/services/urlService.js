@@ -6,7 +6,9 @@ const findUrlByCode = async (code) => {
         const cachedUrl = await redis.get(`url:${code}`);
         if(cachedUrl){
             console.log("REDIS hitt --");
-            await IncrementClicks(code);
+            // await IncrementClicks(code);
+            await redis.incr(`click:${code}`);
+            await redis.sadd("active_clicks", code);
             return cachedUrl;
         }
         console.log("Redis MISS");
@@ -23,8 +25,9 @@ const findUrlByCode = async (code) => {
         );
 
         await redis.incr(`click:${code}`);
+        await redis.sadd("active_clicks", code);
 
-        await IncrementClicks(code);
+        // await IncrementClicks(code);
         return url.original_url;
 
     } catch (error) {

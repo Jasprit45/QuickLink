@@ -76,6 +76,18 @@ const deleteByCodes = async (codes) => {
   return result.rows;
 };
 
+const addClicks = async (code, clicks) => {
+  const result = await pool.query(
+    `UPDATE urls
+    SET clicks = clicks + $1
+    WHERE short_code = $2
+    returning *
+    `,
+    [clicks, code]
+  );
+  return result.rows[0];
+}
+
 module.exports= {
     createUrl,
     IncrementClicks,
@@ -83,5 +95,6 @@ module.exports= {
     getClicksByCodes,
     getByCode,
     findByCode,
-    deleteByCodes
+    deleteByCodes,
+    addClicks
 }
